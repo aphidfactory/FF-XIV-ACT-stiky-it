@@ -7,18 +7,25 @@ try {
 }
 
 function onLogLine(data) {
-	console.log(data)
 	var line = data['line']
 	var type = line[0]
 	var msgType = line[2]
-	var location = line[3]
+	var length = line.length
 
-	if (type === "01" && msgType === "153") {
+	if (type === "01" && length === 5) {
+		var location = line[3]
+		console.log(data)
 		viewMM(location);
 	}
 
-	if (type === "01" && msgType === "9d") {
-		viewDG(location)
+	//"a250141c19e17c4e793bc4661963debd"
+	if (type === "00" && msgType === "0839") {
+		var location = line[4]
+		var dungeon_split_position = location.indexOf(" 공략을 시작합니다.")
+		if (dungeon_split_position !== -1) {
+			console.log(data)
+			viewDG(location.substring(0, dungeon_split_position))
+		}
 	}
 }
 
